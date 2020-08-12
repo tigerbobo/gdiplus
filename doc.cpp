@@ -33,3 +33,39 @@ int CXXXApp::ExitInstance()
 
 	return CWinApp::ExitInstance();
 }
+
+
+void CCircleMeasuringDlg::UpdateImage(int result)
+{
+	CRect rect;
+	CDC *pdc = GetDC();
+	Gdiplus::Image *pImage;
+	Gdiplus::Graphics graphics(pdc->m_hDC);
+
+	GetClientRect(&rect);
+	switch (result)
+	{
+	case IMAGE_OK:
+		pImage = Gdiplus::Image::FromFile(L"img\\OK.png");
+		break;
+	case IMAGE_NG:
+		pImage = Gdiplus::Image::FromFile(L"img\\NG.png");
+		break;
+	case IMAGE_RECHECK:
+		pImage = Gdiplus::Image::FromFile(L"img\\RC.png");
+		break;
+	default:
+		pImage = Gdiplus::Image::FromFile(L"img\\ER.png");
+		break;
+	}
+
+	graphics.DrawImage(
+		pImage,
+		rect.Width() * 812 / 1000,
+		rect.Height() * 676 / 1000,
+		pImage->GetWidth(),
+		pImage->GetHeight());
+
+	delete pImage;
+	ReleaseDC(pdc);
+}
